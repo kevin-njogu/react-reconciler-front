@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        font-family: 'Poppins', system-ui, sans-serif;
+        color: #374151;
+    }
+}
+
+.active {
+    @apply bg-gray-200;
+}
+
+.sidebarNavItem {
+    @apply hover:bg-gray-200 transition-all duration-300 inline-block w-full px-2 py-2 rounded-md;
+}
+
+.generalButton {
+    @apply bg-gray-800 flex flex-row justify-center items-center gap-1 px-4 py-2 rounded-md transform-gpu will-change-transform text-gray-50  hover:scale-105 transition-all duration-500 ease-in-out disabled:cursor-not-allowed;
+}
+
+.manualReconcileButton {
+    @apply bg-gray-800 px-4 py-[2px] rounded-md transform-gpu will-change-transform text-gray-50  hover:scale-105 transition-all duration-500 ease-in-out disabled:cursor-not-allowed;
+}
+
+.paginationButton {
+    @apply flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700;
+}
+
+.dateInput {
+    @apply text-sm px-[2px] py-1 cursor-pointer outline-none border-none focus:outline-none focus:border-none ring-1 rounded-md ring-gray-200;
+}
+
+:root {
+}
