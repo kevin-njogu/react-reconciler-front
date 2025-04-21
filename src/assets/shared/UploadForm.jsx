@@ -43,14 +43,14 @@ const UploadForm = () => {
                         htmlFor="fileupload"
                         className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-300"
                     >
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             <span>
                                 <IoCloudUploadOutline className="text-4xl" />
                             </span>
-                            <p class="mb-2 text-sm text-gray-500 ">
-                                <span class="font-semibold">Click to upload</span>
+                            <p className="mb-2 text-sm text-gray-500 ">
+                                <span className="font-semibold">Click to upload</span>
                             </p>
-                            <p class="text-xs text-gray-500">CSV (MAX.100MB)</p>
+                            <p className="text-xs text-gray-500">CSV (MAX.100MB)</p>
                         </div>
                         <input
                             type="file"

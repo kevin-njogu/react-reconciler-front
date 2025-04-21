@@ -41,9 +41,9 @@ const OutstandingsTable = ({ data, gateway }) => {
 
     return (
         <div className="w-full">
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             {/* <th scope="col" class="p-4">
                                 <div class="flex items-center">
@@ -59,7 +59,7 @@ const OutstandingsTable = ({ data, gateway }) => {
                             </th> */}
                             {TableHeaders?.map((header) => {
                                 return (
-                                    <th scope="col" class="px-6 py-3" key={header}>
+                                    <th scope="col" className="px-6 py-3" key={header}>
                                         {header}
                                     </th>
                                 );
@@ -70,7 +70,7 @@ const OutstandingsTable = ({ data, gateway }) => {
                         {content?.map((item) => {
                             return (
                                 <tr
-                                    class="bg-white border-b border-gray-200 hover:bg-gray-50 text-[12px] "
+                                    className="bg-white border-b border-gray-200 hover:bg-gray-50 text-[12px] "
                                     key={item?.id}
                                 >
                                     {/* <td class="w-4 p-4">
@@ -85,14 +85,14 @@ const OutstandingsTable = ({ data, gateway }) => {
                                             </label>
                                         </div>
                                     </td> */}
-                                    <td class="px-6 py-2">{item?.date}</td>
-                                    <td class="px-6 py-2">{item?.narrative}</td>
-                                    <td class="px-6 py-2">{item?.debit}</td>
-                                    <td class="px-6 py-2">{item?.credit}</td>
-                                    <td class="px-6 py-2">{item?.isReconciled}</td>
-                                    <td class="px-6 py-2">
+                                    <td className="px-6 py-2">{item?.date}</td>
+                                    <td className="px-6 py-2">{item?.narrative}</td>
+                                    <td className="px-6 py-2">{item?.debit}</td>
+                                    <td className="px-6 py-2">{item?.credit}</td>
+                                    <td className="px-6 py-2">{item?.isReconciled}</td>
+                                    <td className="px-6 py-2">
                                         <button
-                                            class="manualReconcileButton"
+                                            className="manualReconcileButton"
                                             disabled={isPending}
                                             onClick={() => handleManualReconcilition(item?.id)}
                                         >
@@ -105,30 +105,30 @@ const OutstandingsTable = ({ data, gateway }) => {
                     </tbody>
                 </table>
                 <nav
-                    class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
+                    className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
                     aria-label="Table navigation"
                 >
-                    <span class="text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-                        Showing <span class="font-semibold text-gray-900 ">{page}</span> of{' '}
-                        <span class="font-semibold text-gray-900">{totalPages}</span>
-                        <span class=""></span> pages <span class=""> with </span>
-                        <span class="font-semibold text-gray-900 ">{totalElements}</span>
-                        <span class=""> transactions</span>
+                    <span className="text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+                        Showing <span className="font-semibold text-gray-900 ">{page}</span> of{' '}
+                        <span className="font-semibold text-gray-900">{totalPages}</span>
+                        <span className=""></span> pages <span className=""> with </span>
+                        <span className="font-semibold text-gray-900 ">{totalElements}</span>
+                        <span className=""> transactions</span>
                     </span>
-                    <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+                    <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
                         <li>
                             <button
-                                class="paginationButton rounded-s-lg"
+                                className="paginationButton rounded-s-lg"
                                 onClick={handlePreviousPage}
                             >
                                 Previous
                             </button>
                         </li>
                         <li>
-                            <p class="paginationButton">{page}</p>
+                            <p className="paginationButton">{page}</p>
                         </li>
                         <li>
-                            <button class="paginationButton" onClick={handleNextPage}>
+                            <button className="paginationButton" onClick={handleNextPage}>
                                 Next
                             </button>
                         </li>

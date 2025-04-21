@@ -46,7 +46,7 @@ const Outstandings = () => {
                         id="gateway"
                         {...register('gateway', { required: true })}
                     >
-                        <option selected>choose a gateway</option>
+                        <option defaultValue="choose a gateway">choose a gateway</option>
                         <option value={'equity'}>equity</option>
                         <option value={'equitywp'}>equitywp</option>
                     </select>

@@ -8,9 +8,9 @@ const SideBar = () => {
         <>
             <button
                 type="button"
-                class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
             >
-                <span class="sr-only">Open sidebar</span>
+                <span className="sr-only">Open sidebar</span>
                 <span>
                     <IoMenuSharp />
                 </span>
@@ -18,17 +18,17 @@ const SideBar = () => {
 
             <aside
                 id="default-sidebar"
-                class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+                className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
                 aria-label="Sidebar"
             >
-                <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50">
-                    <ul class="space-y-2 font-medium">
+                <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
+                    <ul className="space-y-2 font-medium">
                         <li>
-                            <NavLink to={'/home'} className="sidebarNavItem">
+                            <NavLink to={'/'} className="sidebarNavItem">
                                 <span>
                                     <HiRefresh className="sidebarIcon" aria-hidden="true" />
                                 </span>
-                                <span class="ms-3">Reconcile</span>
+                                <span className="ms-3">Reconcile</span>
                             </NavLink>
                         </li>
 
@@ -37,7 +37,7 @@ const SideBar = () => {
                                 <span>
                                     <LuTimerReset className="sidebarIcon" />
                                 </span>
-                                <span class="ms-3">Outstanding</span>
+                                <span className="ms-3">Outstanding</span>
                             </NavLink>
                         </li>
                     </ul>

@@ -20,14 +20,14 @@ function App() {
             <PaginationProvider>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<MainLayout />}>
-                            <Route path="home" element={<Reconciliation />} />
+                        <Route element={<MainLayout />}>
+                            <Route path="/" element={<Reconciliation />} />
                             <Route path="outstandings" element={<Outstandings />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>
             </PaginationProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
+            {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         </QueryClientProvider>
     );
 }

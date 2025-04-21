@@ -56,7 +56,7 @@ const ReconciliationForm = () => {
                             id="gateway"
                             {...register('gateway', { required: true })}
                         >
-                            <option selected>Choose a gateway</option>
+                            <option defaultValue="Choose a gateway">Choose a gateway</option>
                             <option value={'equity'}>equity</option>
                         </select>
                         {errors.gateway && (
