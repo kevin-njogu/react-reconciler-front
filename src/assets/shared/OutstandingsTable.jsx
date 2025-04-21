@@ -3,7 +3,7 @@ import { usePaginationContext } from '../context/Pagination';
 
 const TableHeaders = ['DATE', 'NARRATIVE', 'DEBIT', 'CREDIT', 'STATUS', 'ACTION'];
 
-const OutstandingsTable = ({ data }) => {
+const OutstandingsTable = ({ data, gateway }) => {
     const { page, dispatch } = usePaginationContext();
     const { isPending, reconcile } = useManualReconcile();
     const content = data?.content;
@@ -13,7 +13,12 @@ const OutstandingsTable = ({ data }) => {
     const totalPages = data?.totalPages - 1;
 
     function handleManualReconcilition(id) {
-        reconcile(id);
+        if (!id || !gateway) {
+            return null;
+        } else {
+            const data = { trnId: id, gtw: gateway };
+            reconcile(data);
+        }
     }
 
     function handlePreviousPage() {

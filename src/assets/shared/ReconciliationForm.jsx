@@ -4,6 +4,7 @@ import { FiRefreshCcw } from 'react-icons/fi';
 import Loader from './Loader';
 import { useReconciliation } from '../api/reconciliation';
 import { useDownload } from '../api/download';
+import { toast } from 'react-toastify';
 
 const ReconciliationForm = () => {
     const today = new Date();
@@ -20,12 +21,20 @@ const ReconciliationForm = () => {
     } = useForm();
 
     function reconcile(data) {
+        if (data?.gateway == 'Choose a gateway') {
+            toast('Choose a valid gateway', { type: 'error' });
+            return;
+        }
         console.log(data);
         systemReconcile(data);
         reset();
     }
 
     function download(data) {
+        if (data?.gateway == 'Choose a gateway') {
+            toast('Choose a valid gateway', { type: 'error' });
+            return;
+        }
         downloadCsv(data);
         reset();
     }
@@ -37,14 +46,17 @@ const ReconciliationForm = () => {
             </div>
             <form className="flex flex-col gap-3">
                 <div className="flex flex-row gap-4 w-full justify-between items-center bg-gray-50">
-                    <div className="flex flex-col w-full text-sm">
-                        <label htmlFor="gateway">Gateway</label>
+                    <div className="flex flex-col text-sm w-full">
+                        <label htmlFor="gateway" className="topLabel">
+                            Gateway
+                        </label>
                         <select
-                            className="dateInput"
+                            className="select"
                             name="gateway"
                             id="gateway"
                             {...register('gateway', { required: true })}
                         >
+                            <option selected>Choose a gateway</option>
                             <option value={'equity'}>equity</option>
                         </select>
                         {errors.gateway && (
@@ -52,33 +64,39 @@ const ReconciliationForm = () => {
                         )}
                     </div>
 
-                    <div className="flex flex-col w-full text-sm">
-                        <label htmlFor="startdate">StartDate</label>
-                        <input
-                            type="date"
-                            name="startdate"
-                            id="startdate"
-                            max={formattedDate}
-                            className="dateInput"
-                            {...register('startdate', { required: true })}
-                        />
-                        {errors.startdate && (
-                            <p className="text-red-500 text-[8px]">Date is required</p>
-                        )}
-                    </div>
+                    <div className="flex items-center w-full justify-between gap-2">
+                        <div className="flex flex-col text-sm w-full">
+                            <label htmlFor="startdate" className="topLabel">
+                                StartDate
+                            </label>
+                            <input
+                                type="date"
+                                name="startdate"
+                                id="startdate"
+                                max={formattedDate}
+                                className="dateInput"
+                                {...register('startdate', { required: true })}
+                            />
+                            {errors.startdate && (
+                                <p className="text-red-500 text-[8px]">Date is required</p>
+                            )}
+                        </div>
 
-                    <div className="flex flex-col w-full text-sm">
-                        <label htmlFor="enddate">EndDate</label>
-                        <input
-                            type="date"
-                            name="enddate"
-                            max={formattedDate}
-                            className="dateInput"
-                            {...register('enddate', { required: true })}
-                        />
-                        {errors.enddate && (
-                            <p className="text-red-500 text-[8px]">Date is required</p>
-                        )}
+                        <div className="flex flex-col w-full text-sm">
+                            <label htmlFor="enddate" className="topLabel">
+                                EndDate
+                            </label>
+                            <input
+                                type="date"
+                                name="enddate"
+                                max={formattedDate}
+                                className="dateInput"
+                                {...register('enddate', { required: true })}
+                            />
+                            {errors.enddate && (
+                                <p className="text-red-500 text-[8px]">Date is required</p>
+                            )}
+                        </div>
                     </div>
                 </div>
 

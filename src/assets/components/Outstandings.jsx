@@ -1,9 +1,19 @@
 import OutstandingsTable from '../shared/OutstandingsTable';
 import Loader from '../shared/Loader';
 import { useGetOutstanding } from '../api/transactions';
+import { useForm } from 'react-hook-form';
+import ErrorMessage from '../shared/ErrorMessage';
 
 const Outstandings = () => {
-    const { isPending, data, isError, error } = useGetOutstanding();
+    const {
+        register,
+        watch,
+        formState: { errors },
+    } = useForm();
+
+    const selectedGateway = watch('gateway');
+
+    const { isPending, data, isError, error } = useGetOutstanding(selectedGateway);
 
     if (isPending) {
         return <Loader />;
@@ -11,11 +21,11 @@ const Outstandings = () => {
 
     if (isError) {
         console.error(error.message);
-        return (
-            <div>
-                <p>Error Loading data..</p>
-            </div>
-        );
+        return <ErrorMessage />;
+    }
+
+    if (!data) {
+        return <ErrorMessage />;
     }
 
     if (data) {
@@ -25,8 +35,28 @@ const Outstandings = () => {
                 <div>
                     <h4 className="text-xl">Outstanding Items</h4>
                 </div>
+
+                <div className="text-sm">
+                    <label htmlFor="gateway" className="topLabel">
+                        Select Gateway
+                    </label>
+                    <select
+                        className="select"
+                        name="gateway"
+                        id="gateway"
+                        {...register('gateway', { required: true })}
+                    >
+                        <option selected>choose a gateway</option>
+                        <option value={'equity'}>equity</option>
+                        <option value={'equitywp'}>equitywp</option>
+                    </select>
+                    {errors.gateway && (
+                        <p className="text-red-500 text-[8px]">Gateway is required</p>
+                    )}
+                </div>
+
                 <div>
-                    <OutstandingsTable data={data} />
+                    <OutstandingsTable data={data} gateway={selectedGateway} />
                 </div>
             </div>
         );

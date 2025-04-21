@@ -3,10 +3,25 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const manualReconcile = async id => {
+const manualReconcile = async (data) => {
+    let selectedGateway;
+
+    if (data?.gtw === 'choose a gateway') {
+        throw new Error('Choose a gateway');
+    } else {
+        selectedGateway = data?.gtw;
+    }
+
+    //console.log(selectedGateway);
     try {
-        const response = await axios.post(`http://localhost:8080/api/user/manual/reconcile/${id}`);
-        console.log(response.data);
+        const response = await axios.post(
+            `http://localhost:8080/api/user/manual/reconcile/${data?.trnId}`,
+            {},
+            {
+                params: { gateway: selectedGateway },
+            },
+        );
+        //console.log(response.data);
         return response.data;
     } catch (error) {
         console.error(error.message);
@@ -16,23 +31,29 @@ const manualReconcile = async id => {
 export const useManualReconcile = () => {
     const queryClient = useQueryClient();
     const { isPending, mutate: reconcile } = useMutation({
-        mutationFn: id => manualReconcile(id),
+        mutationFn: (data) => manualReconcile(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['unreconciled'] });
             toast('Item closed', { type: 'success' });
         },
-        onError: error => {
+        onError: (error) => {
             console.error(error.message);
-            toast('Failed to reconcile', { type: 'error' });
+            toast(error.message, { type: 'error' });
         },
     });
     return { isPending, reconcile };
 };
 
-const getOutstandings = async page => {
+const getOutstandings = async (page, gateway) => {
+    let selectedGateway;
+    if (gateway === 'choose a gateway') {
+        selectedGateway = 'equity';
+    } else {
+        selectedGateway = gateway;
+    }
     try {
         const response = await axios.get('http://localhost:8080/api/user/outstanding/all', {
-            params: { pageNumber: page },
+            params: { pageNumber: page, gateway: selectedGateway },
         });
         //console.log(response.data);
         return response.data;
@@ -41,11 +62,11 @@ const getOutstandings = async page => {
     }
 };
 
-export const useGetOutstanding = () => {
+export const useGetOutstanding = (gateway) => {
     const { page } = usePaginationContext();
     const { isPending, data, isError, error } = useQuery({
-        queryFn: () => getOutstandings(page),
-        queryKey: ['unreconciled', { page: page }],
+        queryFn: () => getOutstandings(page, gateway),
+        queryKey: ['unreconciled', { page: page, gateway: gateway }],
     });
 
     return { isPending, data, isError, error };
