@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import { axiosInstace } from './axios';
 
 const reconcile = async (data) => {
     const pathVariable = data?.gateway;
@@ -10,11 +10,9 @@ const reconcile = async (data) => {
     }
     //console.log(data);
     try {
-        const response = await axios.post(
-            `http://localhost:8080/api/user/reconcile/${pathVariable}`,
-            requestBody,
-            { headers: { 'Content-Type': 'application/json' } },
-        );
+        const response = await axiosInstace.post(`/user/reconcile/${pathVariable}`, requestBody, {
+            headers: { 'Content-Type': 'application/json' },
+        });
         return response?.data;
     } catch (error) {
         console.error('Upload error', error);

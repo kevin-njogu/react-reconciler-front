@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import { axiosInstace } from './axios';
 
 const download = async (data) => {
     const pathVariable = data?.gateway;
@@ -11,8 +11,8 @@ const download = async (data) => {
     }
     //console.log(data);
     try {
-        const response = await axios.post(
-            `http://localhost:8080/api/user/download/csv/${pathVariable}`,
+        const response = await axiosInstace.post(
+            `/user/download/csv/${pathVariable}`,
             requestBody,
             { headers: { 'Content-Type': 'application/json' }, responseType: 'blob' },
         );

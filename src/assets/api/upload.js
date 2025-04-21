@@ -1,14 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import { axiosInstace } from './axios';
 
 const upload = async (formData) => {
     try {
-        const response = await axios.post(
-            'http://localhost:8080/api/user/upload/statement',
-            formData,
-            { headers: { 'Content-Type': 'multipart/form-data' } },
-        );
+        const response = await axiosInstace.post('/user/upload/statement', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
         // console.log("Upload successful", response?.data)
         return response?.data;
     } catch (error) {

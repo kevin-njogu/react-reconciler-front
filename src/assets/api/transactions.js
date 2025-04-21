@@ -1,7 +1,7 @@
 import { usePaginationContext } from '@/assets/context/Pagination';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import { axiosInstace } from './axios';
 
 const manualReconcile = async (data) => {
     let selectedGateway;
@@ -14,8 +14,8 @@ const manualReconcile = async (data) => {
 
     //console.log(selectedGateway);
     try {
-        const response = await axios.post(
-            `http://localhost:8080/api/user/manual/reconcile/${data?.trnId}`,
+        const response = await axiosInstace.post(
+            `/user/manual/reconcile/${data?.trnId}`,
             {},
             {
                 params: { gateway: selectedGateway },
@@ -52,7 +52,7 @@ const getOutstandings = async (page, gateway) => {
         selectedGateway = gateway;
     }
     try {
-        const response = await axios.get('http://localhost:8080/api/user/outstanding/all', {
+        const response = await axiosInstace.get('/user/outstanding/all', {
             params: { pageNumber: page, gateway: selectedGateway },
         });
         //console.log(response.data);
