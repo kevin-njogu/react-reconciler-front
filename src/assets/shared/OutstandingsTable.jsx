@@ -1,15 +1,24 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { useManualReconcile } from '../api/transactions';
-import { usePaginationContext } from '../context/Pagination';
+import { next, previous } from '../store/slices/paginationSlice';
 
 const TableHeaders = ['DATE', 'NARRATIVE', 'DEBIT', 'CREDIT', 'STATUS', 'ACTION'];
 
-const OutstandingsTable = ({ data, gateway }) => {
-    const { page, dispatch } = usePaginationContext();
+const OutstandingsTable = ({ data }) => {
+    const page = useSelector((state) => state.pagination.page);
+
+    const gateway = useSelector((state) => state.outstanding.gateway);
+
+    const dispatch = useDispatch();
+
     const { isPending, reconcile } = useManualReconcile();
+
     const content = data?.content;
-    //const pageSize = data?.pageSize;
+
     const totalElements = data?.totalElements;
+
     const lastPage = data?.lastPage;
+
     const totalPages = data?.totalPages - 1;
 
     function handleManualReconcilition(id) {
@@ -22,20 +31,14 @@ const OutstandingsTable = ({ data, gateway }) => {
     }
 
     function handlePreviousPage() {
-        if (page === 0) {
-            return null;
-        }
         if (page > 0) {
-            dispatch({ type: 'prev' });
+            dispatch(previous());
         }
     }
 
     function handleNextPage() {
-        if (lastPage) {
-            return null;
-        }
-        if (lastPage !== true) {
-            dispatch({ type: 'next' });
+        if (!lastPage) {
+            dispatch(next());
         }
     }
 

@@ -1,7 +1,7 @@
-import { usePaginationContext } from '@/assets/context/Pagination';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { axiosInstace } from './axios';
+import { useSelector } from 'react-redux';
 
 const manualReconcile = async (data) => {
     let selectedGateway;
@@ -30,31 +30,30 @@ const manualReconcile = async (data) => {
 
 export const useManualReconcile = () => {
     const queryClient = useQueryClient();
+
     const { isPending, mutate: reconcile } = useMutation({
         mutationFn: (data) => manualReconcile(data),
+
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['unreconciled'] });
             toast('Item closed', { type: 'success' });
         },
+
         onError: (error) => {
             console.error(error.message);
             toast(error.message, { type: 'error' });
         },
     });
+
     return { isPending, reconcile };
 };
 
 const getOutstandings = async (page, gateway) => {
-    let selectedGateway;
-    if (gateway === 'choose a gateway') {
-        selectedGateway = 'equity';
-    } else {
-        selectedGateway = gateway;
-    }
     try {
         const response = await axiosInstace.get('/user/outstanding/all', {
-            params: { pageNumber: page, gateway: selectedGateway },
+            params: { pageNumber: page, gateway: gateway },
         });
+
         //console.log(response.data);
         return response.data;
     } catch (error) {
@@ -62,8 +61,11 @@ const getOutstandings = async (page, gateway) => {
     }
 };
 
-export const useGetOutstanding = (gateway) => {
-    const { page } = usePaginationContext();
+export const useGetOutstanding = () => {
+    const page = useSelector((state) => state.pagination.page);
+
+    const gateway = useSelector((state) => state.outstanding.gateway);
+
     const { isPending, data, isError, error } = useQuery({
         queryFn: () => getOutstandings(page, gateway),
         queryKey: ['unreconciled', { page: page, gateway: gateway }],

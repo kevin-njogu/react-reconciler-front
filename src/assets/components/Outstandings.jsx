@@ -1,19 +1,14 @@
 import OutstandingsTable from '../shared/OutstandingsTable';
 import Loader from '../shared/Loader';
 import { useGetOutstanding } from '../api/transactions';
-import { useForm } from 'react-hook-form';
 import ErrorMessage from '../shared/ErrorMessage';
+import { useDispatch } from 'react-redux';
+import { changeGateway } from '../store/slices/outstandingSlice';
 
 const Outstandings = () => {
-    const {
-        register,
-        watch,
-        formState: { errors },
-    } = useForm();
+    const dispatch = useDispatch();
 
-    const selectedGateway = watch('gateway');
-
-    const { isPending, data, isError, error } = useGetOutstanding(selectedGateway);
+    const { isPending, data, isError, error } = useGetOutstanding();
 
     if (isPending) {
         return <Loader />;
@@ -25,7 +20,12 @@ const Outstandings = () => {
     }
 
     if (!data) {
-        return <ErrorMessage />;
+        return <Loader />;
+    }
+
+    function handleGatewayChange(e) {
+        const selectedGateway = e.target.value;
+        dispatch(changeGateway(selectedGateway));
     }
 
     if (data) {
@@ -40,23 +40,23 @@ const Outstandings = () => {
                     <label htmlFor="gateway" className="topLabel">
                         Select Gateway
                     </label>
+
                     <select
                         className="select"
                         name="gateway"
                         id="gateway"
-                        {...register('gateway', { required: true })}
+                        onChange={(e) => handleGatewayChange(e)}
                     >
-                        <option defaultValue="choose a gateway">choose a gateway</option>
+                        <option value="" disabled>
+                            choose a gateway
+                        </option>
                         <option value={'equity'}>equity</option>
                         <option value={'equitywp'}>equitywp</option>
                     </select>
-                    {errors.gateway && (
-                        <p className="text-red-500 text-[8px]">Gateway is required</p>
-                    )}
                 </div>
 
                 <div>
-                    <OutstandingsTable data={data} gateway={selectedGateway} />
+                    <OutstandingsTable data={data} />
                 </div>
             </div>
         );

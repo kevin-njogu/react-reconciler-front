@@ -4,7 +4,8 @@ import Reconciliation from './assets/components/Reconciliation';
 import Outstandings from './assets/components/Outstandings';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { PaginationProvider } from './assets/context/Pagination';
+import { Provider } from 'react-redux';
+import store from './assets/store/store';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -17,7 +18,7 @@ const queryClient = new QueryClient({
 function App() {
     return (
         <QueryClientProvider client={queryClient}>
-            <PaginationProvider>
+            <Provider store={store}>
                 <BrowserRouter>
                     <Routes>
                         <Route element={<MainLayout />}>
@@ -26,7 +27,7 @@ function App() {
                         </Route>
                     </Routes>
                 </BrowserRouter>
-            </PaginationProvider>
+            </Provider>
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         </QueryClientProvider>
     );

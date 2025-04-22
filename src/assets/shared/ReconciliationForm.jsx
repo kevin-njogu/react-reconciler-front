@@ -4,11 +4,14 @@ import { FiRefreshCcw } from 'react-icons/fi';
 import Loader from './Loader';
 import { useReconciliation } from '../api/reconciliation';
 import { useDownload } from '../api/download';
-import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { changeGateway } from '../store/slices/reconDownloadSlice';
 
 const ReconciliationForm = () => {
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
+
+    const dispatch = useDispatch();
 
     const { isReconciling, systemReconcile } = useReconciliation();
     const { isDownloding, downloadCsv } = useDownload();
@@ -21,21 +24,18 @@ const ReconciliationForm = () => {
     } = useForm();
 
     function reconcile(data) {
-        if (data?.gateway == 'Choose a gateway') {
-            toast('Choose a valid gateway', { type: 'error' });
-            return;
+        if (data) {
+            dispatch(changeGateway(data));
         }
-        console.log(data);
-        systemReconcile(data);
+        systemReconcile();
         reset();
     }
 
     function download(data) {
-        if (data?.gateway == 'Choose a gateway') {
-            toast('Choose a valid gateway', { type: 'error' });
-            return;
+        if (data) {
+            dispatch(changeGateway(data));
         }
-        downloadCsv(data);
+        downloadCsv();
         reset();
     }
 
@@ -48,7 +48,7 @@ const ReconciliationForm = () => {
                 <div className="flex flex-row gap-4 w-full justify-between items-center bg-gray-50">
                     <div className="flex flex-col text-sm w-full">
                         <label htmlFor="gateway" className="topLabel">
-                            Gateway
+                            Select Gateway
                         </label>
                         <select
                             className="select"
@@ -56,7 +56,9 @@ const ReconciliationForm = () => {
                             id="gateway"
                             {...register('gateway', { required: true })}
                         >
-                            <option defaultValue="Choose a gateway">Choose a gateway</option>
+                            <option value="" disabled>
+                                Choose a gateway
+                            </option>
                             <option value={'equity'}>equity</option>
                         </select>
                         {errors.gateway && (
