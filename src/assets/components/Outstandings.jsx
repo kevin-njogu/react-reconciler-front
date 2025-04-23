@@ -16,15 +16,15 @@ const Outstandings = () => {
 
     if (isError) {
         console.error(error.message);
-        return <ErrorMessage />;
+        return <Loader />;
     }
 
     if (!data) {
         return <Loader />;
     }
 
-    function handleGatewayChange(e) {
-        const selectedGateway = e.target.value;
+    function handleGatewayChange(selectedGateway) {
+        // const selectedGateway = e.target.value;
         dispatch(changeGateway(selectedGateway));
     }
 
@@ -36,7 +36,7 @@ const Outstandings = () => {
                     <h4 className="text-xl">Outstanding Items</h4>
                 </div>
 
-                <div className="text-sm">
+                {/* <div className="text-sm">
                     <label htmlFor="gateway" className="topLabel">
                         Select Gateway
                     </label>
@@ -52,7 +52,24 @@ const Outstandings = () => {
                         </option>
                         <option value={'equity'}>equity</option>
                         <option value={'equitywp'}>equitywp</option>
+                        <option value={'mpesa'}>mpesa</option>
+                        <option value={'mpesawp'}>mpesawp</option>
                     </select>
+                </div> */}
+
+                <div className="space-x-2">
+                    {['equity', 'equitywp', 'mpesa', 'mpesawp'].map((btn, idx) => {
+                        return (
+                            <button
+                                key={idx}
+                                type="button"
+                                className="outstandingsButton"
+                                onClick={() => handleGatewayChange(btn)}
+                            >
+                                {btn}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 <div>

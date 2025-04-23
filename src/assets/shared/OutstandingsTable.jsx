@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useManualReconcile } from '../api/transactions';
 import { next, previous } from '../store/slices/paginationSlice';
 
-const TableHeaders = ['DATE', 'NARRATIVE', 'DEBIT', 'CREDIT', 'STATUS', 'ACTION'];
+const TableHeaders = ['DATE', 'NARRATIVE', 'REFERENCE', 'DEBIT', 'CREDIT', 'STATUS', 'ACTION'];
 
 const OutstandingsTable = ({ data }) => {
     const page = useSelector((state) => state.pagination.page);
@@ -46,7 +46,7 @@ const OutstandingsTable = ({ data }) => {
         <div className="w-full">
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <thead className="text-[10px] text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             {/* <th scope="col" class="p-4">
                                 <div class="flex items-center">
@@ -90,6 +90,7 @@ const OutstandingsTable = ({ data }) => {
                                     </td> */}
                                     <td className="px-6 py-2">{item?.date}</td>
                                     <td className="px-6 py-2">{item?.narrative}</td>
+                                    <td className="px-6 py-2">{item?.reference}</td>
                                     <td className="px-6 py-2">{item?.debit}</td>
                                     <td className="px-6 py-2">{item?.credit}</td>
                                     <td className="px-6 py-2">{item?.isReconciled}</td>

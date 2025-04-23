@@ -60,6 +60,7 @@ const ReconciliationForm = () => {
                                 Choose a gateway
                             </option>
                             <option value={'equity'}>equity</option>
+                            <option value={'mpesa'}>mpesa</option>
                         </select>
                         {errors.gateway && (
                             <p className="text-red-500 text-[8px]">Gateway is required</p>

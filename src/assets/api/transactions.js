@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { axiosInstace } from './axios';
 import { useSelector } from 'react-redux';
@@ -69,6 +69,7 @@ export const useGetOutstanding = () => {
     const { isPending, data, isError, error } = useQuery({
         queryFn: () => getOutstandings(page, gateway),
         queryKey: ['unreconciled', { page: page, gateway: gateway }],
+        keepPreviousData: true,
     });
 
     return { isPending, data, isError, error };
