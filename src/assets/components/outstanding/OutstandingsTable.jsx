@@ -1,33 +1,29 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useManualReconcile } from '../api/transactions';
-import { next, previous } from '../store/slices/paginationSlice';
+import { manualReconcile } from '../../api/transactions';
+import { next, previous } from '../../store/slices/paginationSlice';
+import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 const TableHeaders = ['DATE', 'NARRATIVE', 'REFERENCE', 'DEBIT', 'CREDIT', 'STATUS', 'ACTION'];
 
 const OutstandingsTable = ({ data }) => {
     const page = useSelector((state) => state.pagination.page);
-
     const gateway = useSelector((state) => state.outstanding.gateway);
-
     const dispatch = useDispatch();
-
-    const { isPending, reconcile } = useManualReconcile();
+    const queryClient = useQueryClient();
+    const [loading, setLoading] = useState(false);
 
     const content = data?.content;
-
     const totalElements = data?.totalElements;
-
     const lastPage = data?.lastPage;
-
     const totalPages = data?.totalPages - 1;
 
     function handleManualReconcilition(id) {
         if (!id || !gateway) {
-            return null;
-        } else {
-            const data = { trnId: id, gtw: gateway };
-            reconcile(data);
+            return;
         }
+        const data = { trnId: id, gtw: gateway };
+        manualReconcile(data, setLoading, queryClient);
     }
 
     function handlePreviousPage() {
@@ -97,7 +93,7 @@ const OutstandingsTable = ({ data }) => {
                                     <td className="px-6 py-2">
                                         <button
                                             className="manualReconcileButton"
-                                            disabled={isPending}
+                                            disabled={loading}
                                             onClick={() => handleManualReconcilition(item?.id)}
                                         >
                                             Close

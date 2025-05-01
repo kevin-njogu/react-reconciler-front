@@ -1,20 +1,16 @@
 import { useForm } from 'react-hook-form';
 import { GoDownload } from 'react-icons/go';
 import { FiRefreshCcw } from 'react-icons/fi';
-import Loader from './Loader';
-import { useReconciliation } from '../api/reconciliation';
-import { useDownload } from '../api/download';
-import { useDispatch } from 'react-redux';
-import { changeGateway } from '../store/slices/reconDownloadSlice';
+import Loader from '../shared/Loader';
+import { reconcileGateway } from '../../api/reconciliation';
+import { downloadCsv } from '../../api/download';
+import { useState } from 'react';
 
 const ReconciliationForm = () => {
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
-
-    const dispatch = useDispatch();
-
-    const { isReconciling, systemReconcile } = useReconciliation();
-    const { isDownloding, downloadCsv } = useDownload();
+    const [downloading, setDownloading] = useState(false);
+    const [reconciling, setReconciling] = useState(false);
 
     const {
         register,
@@ -23,21 +19,19 @@ const ReconciliationForm = () => {
         reset,
     } = useForm();
 
-    function reconcile(data) {
+    const reconcile = (data) => {
         if (data) {
-            dispatch(changeGateway(data));
+            reconcileGateway(data, setReconciling);
         }
-        systemReconcile();
         reset();
-    }
+    };
 
-    function download(data) {
+    const download = (data) => {
         if (data) {
-            dispatch(changeGateway(data));
+            downloadCsv(data, setDownloading);
         }
-        downloadCsv();
         reset();
-    }
+    };
 
     return (
         <div className="bg-gray-50 w-full p-3 rounded-md">
@@ -108,24 +102,24 @@ const ReconciliationForm = () => {
                         onClick={handleSubmit(reconcile)}
                         type="submit"
                         className="generalButton "
-                        disabled={isReconciling}
+                        disabled={reconciling}
                     >
                         <span>
                             <FiRefreshCcw />
                         </span>
-                        <span>{isReconciling ? <Loader /> : 'Reconcile'}</span>
+                        <span>{reconciling ? <Loader /> : 'Reconcile'}</span>
                     </button>
 
                     <button
                         onClick={handleSubmit(download)}
                         type="submit"
                         className="generalButton"
-                        disabled={isDownloding}
+                        disabled={downloading}
                     >
                         <span>
                             <GoDownload />
                         </span>
-                        <span>{isDownloding ? <Loader /> : 'Download CSV'}</span>
+                        <span>{downloading ? <Loader /> : 'Download CSV'}</span>
                     </button>
                 </div>
             </form>

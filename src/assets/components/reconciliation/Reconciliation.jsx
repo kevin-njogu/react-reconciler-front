@@ -1,5 +1,5 @@
-import ReconciliationForm from '../shared/ReconciliationForm';
-import UploadForm from '../shared/UploadForm';
+import ReconciliationForm from './ReconciliationForm';
+import UploadForm from '../upload/UploadForm';
 
 const Reconciliation = () => {
     return (
@@ -7,8 +7,10 @@ const Reconciliation = () => {
             <div>
                 <h4>Reconciliation Dashboard</h4>
             </div>
-            <UploadForm />
-            <ReconciliationForm />
+            <div className="space-y-4">
+                <UploadForm />
+                <ReconciliationForm />
+            </div>
         </div>
     );
 };

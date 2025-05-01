@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import paginationReducer from './slices/paginationSlice';
 import outstandingReducer from './slices/outstandingSlice';
-import reconDownloadReducer from './slices/reconDownloadSlice';
+import authenticationReducer from './slices/authSlice';
 
 export default configureStore({
     reducer: {
         pagination: paginationReducer,
         outstanding: outstandingReducer,
-        reconciliation: reconDownloadReducer,
+        authentication: authenticationReducer,
     },
 });

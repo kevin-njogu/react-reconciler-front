@@ -1,11 +1,13 @@
 import { useForm } from 'react-hook-form';
 import { IoCloudUploadOutline } from 'react-icons/io5';
-import Loader from './Loader';
-import { useUpload } from '../api/upload';
+import Loader from '../shared/Loader';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
+import { upload } from '@/assets/api/upload';
+import Button from '../shared/Button';
 
 const UploadForm = () => {
-    const { isUploading, uploadFile } = useUpload();
+    const [loading, setLoading] = useState(false);
 
     const {
         register,
@@ -15,17 +17,17 @@ const UploadForm = () => {
     } = useForm();
 
     function handleUpload(data) {
-        const file = data?.fileupload[0];
-        const fileName = file?.name.split('.')[1];
-        //console.log(fileName);
-        //console.log(file);
-        if (fileName !== 'csv') {
-            toast('Invalid file format', { type: 'error' });
-            return;
+        if (data) {
+            const file = data?.fileupload[0];
+            const fileName = file?.name.split('.')[1];
+            if (fileName !== 'csv') {
+                toast('Invalid file format', { type: 'error' });
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', file);
+            upload(formData, setLoading);
         }
-        const formData = new FormData();
-        formData.append('file', file);
-        uploadFile(formData);
         reset();
     }
 
@@ -34,10 +36,7 @@ const UploadForm = () => {
             <div>
                 <h5 className="mb-2">Upload Files</h5>
             </div>
-            <form
-                // className="flex flex-col py-2 px-4 gap-5 border border-dashed border-gray-600 rounded-md"
-                onSubmit={handleSubmit(handleUpload)}
-            >
+            <form onSubmit={handleSubmit(handleUpload)}>
                 <div className="flex flex-col gap-1 items-center justify-center w-full">
                     <label
                         htmlFor="fileupload"
@@ -54,21 +53,24 @@ const UploadForm = () => {
                         </div>
                         <input
                             type="file"
-                            name="fileupload"
                             id="fileupload"
                             className="hidden"
                             {...register('fileupload', { required: true })}
                         />
                     </label>
-                    {errors.fileupload && (
+                    {errors?.fileupload && (
                         <p className="text-red-500 text-[8px]">Invalid file type</p>
                     )}
                 </div>
 
                 <div className="flex justify-center items-center w-full mt-2">
-                    <button type="submit" className="generalButton" disabled={isUploading}>
-                        {isUploading ? <Loader /> : 'Upload Statement'}
-                    </button>
+                    <Button
+                        type="submit"
+                        classname="generalButton"
+                        disabled={loading}
+                        loader={<Loader />}
+                        loading={loading}
+                    />
                 </div>
             </form>
         </div>

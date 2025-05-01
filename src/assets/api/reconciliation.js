@@ -1,43 +1,32 @@
-import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { axiosInstace } from './axios';
-import { useSelector } from 'react-redux';
+import getCsrf from './csrf';
 
-const reconcile = async (data) => {
+export const reconcileGateway = async (data, setReconciling) => {
     const pathVariable = data?.gateway;
-
     const requestBody = { startDate: data?.startdate, endDate: data?.enddate };
-
+    const csrf = (await getCsrf()) || null;
     if (!pathVariable || !requestBody) {
-        toast('Reconciliation failed', { type: 'error' });
+        console.error('Reconciloation error, pathvariable and request body cannot be null');
+        return;
     }
-    //console.log(data);
+    if (!csrf) {
+        console.error('Reconciloation error, csrf token cannot be null');
+        return;
+    }
     try {
+        setReconciling(true);
         const response = await axiosInstace.post(`/user/reconcile/${pathVariable}`, requestBody, {
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': csrf },
         });
-
-        return response?.data;
+        toast('Reconciliation completed', { type: 'success' });
+        setReconciling(false);
+        return response;
     } catch (error) {
-        console.error('Upload error', error);
+        console.error(error?.message || 'Reconciliation error');
+        setReconciling(false);
+        toast('Reconciliation failed', { type: 'error' });
+    } finally {
+        setReconciling(false);
     }
-};
-
-export const useReconciliation = () => {
-    const data = useSelector((state) => state.reconciliation);
-
-    const { isPending: isReconciling, mutate: systemReconcile } = useMutation({
-        mutationFn: () => reconcile(data),
-
-        onSuccess: (data) => {
-            toast(data?.message, { type: 'success' });
-        },
-
-        onError: (error) => {
-            console.error(error.message);
-            toast('Reconciliation request failed', { type: 'error' });
-        },
-    });
-
-    return { isReconciling, systemReconcile };
 };

@@ -1,61 +1,42 @@
-import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { axiosInstace } from './axios';
-import { useSelector } from 'react-redux';
+import getCsrf from './csrf';
 
-const download = async (data) => {
+export const downloadCsv = async (data, setDownloading) => {
     const pathVariable = data?.gateway;
-
     const requestBody = { startDate: data?.startdate, endDate: data?.enddate };
-
-    //console.log(requestBody);
-
+    const csrf = (await getCsrf()) || null;
     if (!pathVariable || !requestBody) {
-        toast('Download failed', { type: 'error' });
+        console.error('Download error, pathvariable and request body cannot be null');
+        return;
     }
-
-    //console.log(data);
-
+    if (!csrf) {
+        console.error('Download error, csrf token cannot be null');
+        return;
+    }
     try {
+        setDownloading(true);
         const response = await axiosInstace.post(
             `/user/download/csv/${pathVariable}`,
             requestBody,
-            { headers: { 'Content-Type': 'application/json' }, responseType: 'blob' },
+            {
+                headers: { 'Content-Type': 'application/json', 'X-XSRF-TOKEN': csrf },
+                responseType: 'blob',
+            },
         );
-
         const url = window.URL.createObjectURL(new Blob([response.data]));
-
         const link = document.createElement('a');
-
         link.href = url;
-
         link.setAttribute('download', `${pathVariable}.csv`);
-
         document.body.appendChild(link);
-
         link.click();
-
-        //console.log("Download successful", response?.data)
+        setDownloading(false);
+        toast('Report downloaded', { type: 'success' });
     } catch (error) {
-        console.error('Upload error', error);
+        console.error(error?.message || 'Download error');
+        setDownloading(false);
+        toast('Download failed', { type: 'error' });
+    } finally {
+        setDownloading(false);
     }
-};
-
-export const useDownload = () => {
-    const data = useSelector((state) => state.reconciliation);
-
-    const { isPending: isDownloding, mutate: downloadCsv } = useMutation({
-        mutationFn: () => download(data),
-
-        onSuccess: () => {
-            toast('Dowload successful', { type: 'success' });
-        },
-
-        onError: (error) => {
-            console.error(error);
-            toast('Download failed', { type: 'error' });
-        },
-    });
-
-    return { isDownloding, downloadCsv };
 };

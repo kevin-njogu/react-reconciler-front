@@ -1,9 +1,20 @@
-import { NavLink } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import { HiRefresh } from 'react-icons/hi';
 import { LuTimerReset } from 'react-icons/lu';
 import { IoMenuSharp } from 'react-icons/io5';
+import { useDispatch, useSelector } from 'react-redux';
+import { TbLogout } from 'react-icons/tb';
+import { logout } from '../../api/authentication';
 
 const SideBar = () => {
+    const user = useSelector((state) => state.authentication.user);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleLogout = () => {
+        logout(navigate, dispatch);
+    };
+
     return (
         <>
             <button
@@ -21,10 +32,15 @@ const SideBar = () => {
                 className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
                 aria-label="Sidebar"
             >
-                <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
+                <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 space-y-4">
+                    <div>
+                        <p className="bg-gray-800 rounded-md px-2 text-center font-bold text-green-500">
+                            {user?.username}
+                        </p>
+                    </div>
                     <ul className="space-y-2 font-medium">
                         <li>
-                            <NavLink to={'/'} className="sidebarNavItem">
+                            <NavLink to={'/reconciliation'} className="sidebarNavItem">
                                 <span>
                                     <HiRefresh className="sidebarIcon" aria-hidden="true" />
                                 </span>
@@ -41,6 +57,14 @@ const SideBar = () => {
                             </NavLink>
                         </li>
                     </ul>
+                    <div>
+                        <button className="sidebarNavItem" onClick={handleLogout}>
+                            <span>
+                                <TbLogout className="sidebarIcon" />
+                            </span>
+                            <span className="ms-3">Logout</span>
+                        </button>
+                    </div>
                 </div>
             </aside>
         </>
