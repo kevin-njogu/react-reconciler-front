@@ -27,7 +27,6 @@ function App() {
                         <Route element={<RootLayout />}>
                             <Route index element={<Login />} />
                             <Route path="login" element={<Login />} />
-
                             <Route element={<PrivateRoute />}>
                                 <Route element={<MainLayout />}>
                                     <Route path="reconciliation" element={<Reconciliation />} />

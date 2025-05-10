@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const url = 'http://spring-recon-env.eba-y5zh82na.eu-north-1.elasticbeanstalk.com/api';
-//const url = 'http://localhost:8080/api';
+//const url = 'http://spring-recon-env.eba-y5zh82na.eu-north-1.elasticbeanstalk.com/api';
+const url = 'http://localhost:8080/api';
 
 export const axiosInstace = axios.create({
     baseURL: url,

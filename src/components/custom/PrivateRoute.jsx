@@ -1,13 +1,28 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Navigate, Outlet } from 'react-router';
+import { Navigate, Outlet, useNavigate } from 'react-router';
+import { jwtDecode } from 'jwt-decode';
 
 const PrivateRoute = () => {
-    const user = useSelector((state) => state.authentication.user);
+    const navigate = useNavigate();
 
-    if (!user) {
-        return <Navigate to="/login" />;
+    function isTokenExpired(tkn) {
+        try {
+            const decoded = jwtDecode(tkn);
+            console.log(decoded);
+            const currentTime = Math.floor(Date.now() / 1000);
+            return decoded.exp < currentTime;
+        } catch (error) {
+            console.error('Invalid token:', error);
+            return true;
+        }
     }
+
+    const token = localStorage.getItem('token');
+
+    if (!token || isTokenExpired(token)) {
+        navigate('/login');
+    }
+
     return <Outlet />;
 };
 
