@@ -3,22 +3,14 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 import { ToastContainer, Zoom } from 'react-toastify';
+import { Provider } from './components/ui/provider';
+import { Toaster } from './components/ui/toaster';
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <App />
-        <ToastContainer
-            position="top-right"
-            autoClose={500}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-            transition={Zoom}
-        />
+        <Provider>
+            <App />
+            <Toaster />
+        </Provider>
     </StrictMode>,
 );
